@@ -57,19 +57,31 @@ class Roshambo
   lookupAutosavedData: ->
     autosaved = localStorage.getItem(@autoSaveKey)
     if autosaved
-      @el.text(autosaved)
+      @el.html(autosaved)
 
   setupBindings: ->
     @el.on 'keydown', (ev) =>
 
       # Store the user's data on it's element.
       $el = $(ev.target)
-      text = $el.text()
       html = $el.html()
       $el.attr 'data-raw', html
 
       # Shove it in local storage for autosave.
-      localStorage.setItem @autoSaveKey, text
+      localStorage.setItem @autoSaveKey, html
+
+    $('#toolbar button').on 'click', (ev) ->
+      $button = $(ev.target)
+      $button.toggleClass('active')
+
+    $('#bold').on 'click', (ev) =>
+      this.toggleBold()
+
+    $('#italic').on 'click', (ev) =>
+      this.toggleItalic()
+
+    $('#ul').on 'click', (ev) =>
+      this.insertUnorderedList()    
 
 $.roshambo = (el, key) -> new Roshambo(el, key)
 
