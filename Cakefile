@@ -1,5 +1,6 @@
 {print} = require 'util'
 {spawn} = require 'child_process'
+fs = require 'fs'
 
 build = (callback) ->
   coffee = spawn 'coffee', ['-c', '-o', 'lib', 'src']

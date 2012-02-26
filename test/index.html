@@ -1,9 +1,70 @@
 <html>
 <head>
   <title>Justin</title>
+  <link rel='stylesheet' href='bootstrap.css' />
+  <link rel='stylesheet' href='test.css' />
+
+  <script type="text/javascript" src='jquery.js'></script>
+  <script type="text/javascript" src='prettify.js'></script>
   <script type="text/javascript" src='../lib/roshambo.js'></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var editor = $.roshambo('#editor')
+
+
+      $('#bold').on('click', function(ev) {
+        editor.toggleBold()
+      })
+
+      $('button').on('click', function(ev) {
+        $el = $(ev.target);
+        $el.toggleClass('active');
+      });
+
+      $('#italic').on('click', function(ev) {
+        editor.toggleItalic()
+      });
+
+      $('#ul').on('click', function(ev) {
+        editor.insertUnorderedList()
+      });
+
+      editor.el.on('keydown', function(ev) {
+        html = editor.html()
+        $('#preview').text(html)
+      });
+
+    })
+  </script>
 </head>
 <body>
+  <div id='container'>
+    <h1>Roshambo</h1>
 
+    <p>A demo of the roshambo text editor.</p>
+
+    <section>
+      <h3>Usage:</h3>      
+
+      <p><code style='color: #333;'>$.roshambo(el)</code></p>
+
+      <h3>Live Demo</h3>
+    </section>
+
+    <header id='toolbar'>
+      <button id='bold'>B</button>
+      <button id='italic' style='font-style: italic;'>I</button>
+      <button id='ul'><img src='ul.png' style='height: 15px;'/></button>
+    </header>
+    
+    <div id='editor' data-source=''></div>
+    <button>Justin Woodbridge.</button>
+
+    <hr />
+
+    <h3>The Rendered HTML</h3>
+    <pre id='preview' class='prettyprint'>
+    </pre>
+  </div>
 </body>
 </html>
