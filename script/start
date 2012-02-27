@@ -1,0 +1,10 @@
+#! /bin/bash
+#
+# simple script for setting up editting environment.
+
+
+
+# Make sure we open the page first so the editor is in focus.
+
+open "test/index.html"
+subl -n -a .
