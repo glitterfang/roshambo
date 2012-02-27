@@ -1,39 +1,17 @@
 <html>
 <head>
-  <title>Justin</title>
+  <title>Roshambo Demo</title>
   <link rel='stylesheet' href='bootstrap.css' />
   <link rel='stylesheet' href='test.css' />
+  <link rel='stylesheet' href='../assets/roshambo.css' />
 
   <script type="text/javascript" src='jquery.js'></script>
   <script type="text/javascript" src='prettify.js'></script>
   <script type="text/javascript" src='../lib/roshambo.js'></script>
+
   <script type="text/javascript">
     $(document).ready(function() {
       var editor = $.roshambo('#editor')
-
-
-      $('#bold').on('click', function(ev) {
-        editor.toggleBold()
-      })
-
-      $('button').on('click', function(ev) {
-        $el = $(ev.target);
-        $el.toggleClass('active');
-      });
-
-      $('#italic').on('click', function(ev) {
-        editor.toggleItalic()
-      });
-
-      $('#ul').on('click', function(ev) {
-        editor.insertUnorderedList()
-      });
-
-      editor.el.on('keydown', function(ev) {
-        html = editor.html()
-        $('#preview').text(html)
-      });
-
     })
   </script>
 </head>
