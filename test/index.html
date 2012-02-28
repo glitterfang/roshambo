@@ -1,12 +1,45 @@
 <html>
 <head>
   <title>Roshambo Demo</title>
-  <link rel='stylesheet' href='bootstrap.css' />
-  <link rel='stylesheet' href='test.css' />
+  <link rel='stylesheet' href='css/bootstrap.css' />
   <link rel='stylesheet' href='../assets/roshambo.css' />
 
-  <script type="text/javascript" src='jquery.js'></script>
-  <script type="text/javascript" src='prettify.js'></script>
+  <style type="text/css">
+    body {
+      font-family: Helvetica;
+    }
+
+    #container {
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 40px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      border: 1px solid #CCC;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #222;
+    }
+
+
+    section {
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      color: #444;
+    }
+  </style>
+
+  <script type="text/javascript" src='js/jquery.js'></script>
   <script type="text/javascript" src='../lib/roshambo.js'></script>
 
   <script type="text/javascript">
@@ -57,7 +90,7 @@
     <header id='toolbar'>
       <button id='bold'>B</button>
       <button id='italic' style='font-style: italic;'>I</button>
-      <button id='ul'><img src='ul.png' style='height: 15px;'/></button>
+      <button id='ul'><img src='../assets/ul.png' style='height: 15px;'/></button>
     </header>
 
     <div id='editor' data-source=''></div>
