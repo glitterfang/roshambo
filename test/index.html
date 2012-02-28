@@ -11,7 +11,33 @@
 
   <script type="text/javascript">
     $(document).ready(function() {
-      var editor = $.roshambo('#editor')
+      options = {
+        should_autosave: false
+      }
+
+      var editor = $.roshambo('#editor', options)
+
+      // key = 'roshambo:saved'
+
+      // window.load = function() {
+      //   var html = localStorage.getItem(key)
+      //   editor.el.html(html)
+      // }
+
+      // window.save = function() {
+      //   var text = editor.html()
+      //   localStorage.setItem(key, text)
+      // }
+
+      // window.editor = editor
+
+      // editor.el.on('keypress', function(ev) {
+      //   key = ev.keyCode
+      //   console.log(Object.keys(editor.textMap));
+      // });
+
+
+      // load()
     })
   </script>
 </head>
@@ -22,7 +48,7 @@
     <p>A demo of the roshambo text editor.</p>
 
     <section>
-      <h3>Usage:</h3>      
+      <h3>Usage:</h3>
 
       <p><code style='color: #333;'>$.roshambo(el)</code></p>
 
@@ -34,15 +60,14 @@
       <button id='italic' style='font-style: italic;'>I</button>
       <button id='ul'><img src='ul.png' style='height: 15px;'/></button>
     </header>
-    
+
     <div id='editor' data-source=''></div>
     <button>Justin Woodbridge.</button>
 
     <hr />
 
-    <h3>The Rendered HTML</h3>
-    <pre id='preview' class='prettyprint'>
-    </pre>
+    <div id='textmap'>
+    </div>
   </div>
 </body>
 </html>

@@ -1,88 +1,58 @@
-$ = jQuery
+$ ->
+  $ = jQuery
 
-class Roshambo
+  class Roshambo
+    defaults =
+      boldButton: $('button#bold')
+      italicButton: $('button#italic')
+      should_autosave: false
 
-  # Pass it the root element that will serve as the text editor.
-  # Optionally, you can give it an autosave_key which will be used to
-  # make backups to local storage.
-  #
-  # autosave_key defaults to roshambo.
+    constructor: (el, options) ->
+      @config = $.extend options, defaults
 
-  constructor: (el, autosave_key) -> 
-    @el = $(el)
-    if @el.length == 0
-      console.log("Failed to bind to supplied element.")
-      return false        
+      @el = $(el)
+      @el.attr 'contentEditable', true
 
-    this.enableEditing()
+      @isBold = false
+      @isItalic = false
 
-    @autoSaveKey ?= "roshambo"
-    this.lookupAutosavedData()
+      this.setupBindings()
 
-    this.setupBindings()
+    enableBold: ->
+      document.execCommand('bold')
+      @config.boldButton.addClass('active')
+      @isBold = true
 
-  enableEditing: ->
-    @el.attr 'contenteditable', true
+    enableItalic: ->
+      document.execCommand('italic')
+      @config.italicButton.addClass('active')
+      @isItalic = true
 
-  html: -> @el.html()
+    disableBold: ->
+      document.execCommand('bold')
+      @config.boldButton.removeClass('active')
+      @isBold = false
 
-  focus: ->
-    if document.activeElement != @el
-      @el.focus()
+    disableItalic: ->
+      document.execCommand('italic')
+      @config.italicButton.removeClass('active')
+      @isItalic = false
 
-  toggleBold: ->
-    this.focus()
-    if document.execCommand 'bold'
-      if @isBold
-        this.isBold = false
-      else
-        this.isBold = true
+    setupBindings: ->
+       @config.boldButton.on 'click', (ev) =>
+        if @isBold
+         this.disableBold()
+        else
+          this.enableBold()
 
-  toggleItalic: ->
-    this.focus()
-    if document.execCommand 'italic'
-      if @isItalic
-        @isItalic = false
-      else
-        @isItalic = true
+       @config.italicButton.on 'click', (ev) =>
+         if @isItalic
+            this.disableItalic()
+          else
+            this.enableItalic()
 
-  insertOrderedList: ->
-    this.focus()
-    document.execCommand 'insertOrderedList'
 
-  insertUnorderedList: ->
-    this.focus()
-    document.execCommand 'insertUnorderedList'
 
-  lookupAutosavedData: ->
-    autosaved = localStorage.getItem(@autoSaveKey)
-    if autosaved
-      @el.html(autosaved)
+  $.roshambo = (el, key) -> new Roshambo(el, key)
 
-  setupBindings: ->
-    @el.on 'keydown', (ev) =>
-
-      # Store the user's data on it's element.
-      $el = $(ev.target)
-      html = $el.html()
-      $el.attr 'data-raw', html
-
-      # Shove it in local storage for autosave.
-      localStorage.setItem @autoSaveKey, html
-
-    $('#toolbar button').on 'click', (ev) ->
-      $button = $(ev.target)
-      $button.toggleClass('active')
-
-    $('#bold').on 'click', (ev) =>
-      this.toggleBold()
-
-    $('#italic').on 'click', (ev) =>
-      this.toggleItalic()
-
-    $('#ul').on 'click', (ev) =>
-      this.insertUnorderedList()    
-
-$.roshambo = (el, key) -> new Roshambo(el, key)
-
-$.fn.roshambo = (el, key) -> new Roshambo(el, key)
+  $.fn.roshambo = (el, key) -> new Roshambo(el, key)
