@@ -1,6 +1,6 @@
-$ ->
-  $ = jQuery
+$ = jQuery
 
+$ ->
   class Roshambo
     defaults:
       boldButton: $('button#bold')
