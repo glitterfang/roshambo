@@ -2,13 +2,14 @@ $ ->
   $ = jQuery
 
   class Roshambo
-    defaults =
+    defaults:
       boldButton: $('button#bold')
       italicButton: $('button#italic')
       should_autosave: false
+      autosave_key: 'roshambo'
 
     constructor: (el, options) ->
-      @config = $.extend options, defaults
+      @config = $.extend @defaults, options
 
       @el = $(el)
       @el.attr 'contentEditable', true
@@ -16,7 +17,18 @@ $ ->
       @isBold = false
       @isItalic = false
 
+      if @config.should_autosave
+        this.loadAutosavedData()
+
       this.setupBindings()
+
+    loadAutosavedData: ->
+      html = localStorage.getItem(@config.autosave_key)
+      @el.html html
+
+    autosaveData: ->
+      html = @el.html()
+      localStorage.setItem @config.autosave_key, html
 
     enableBold: ->
       document.execCommand('bold')
