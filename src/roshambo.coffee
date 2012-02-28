@@ -60,14 +60,44 @@ $ ->
       bold: @isBold
       italic: @isItalic
 
+
     # Key events
 
     handleKeypress: (event) ->
-      console.log("Cursor now at #{this.getCursorPosition()}")
+      console.log this.getCursorPosition()
+
+    # Original javascript version:
+    # http://stackoverflow.com/questions/4767848/get-caret-cursor-position-in-contenteditable-area-containing-html-content
+    #
+    # translated to coffeescript with a few tweaks.
 
     getCursorPosition: ->
-      sel = window.getSelection()
-      sel.getRangeAt().startOffset
+      range = window.getSelection().getRangeAt(0)
+
+      # this.el is a jQuery object so pull out the raw dom object
+      el = this.el[0]
+
+      # filter function that tree walker uses to qualify a node.
+      node_filter = (node) ->
+        nodeRange = document.createRange()
+        nodeRange.selectNode(node)
+        if nodeRange.compareBoundaryPoints(Range.END_TO_END, range) < 1
+          NodeFilter.FILTER_ACCEPT
+        else
+          NodeFilter.FILTER_REJECT
+
+      treeWalker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, node_filter, false)
+
+      count = 0
+
+      while treeWalker.nextNode()
+        count += treeWalker.currentNode.length
+
+      # 3 is the text mode.
+      if range.startContainer.nodeType == Node.TEXT_NODE
+        count += range.startOffset
+
+      count
 
     setupBindings: ->
       @el.on
