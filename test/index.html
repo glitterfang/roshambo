@@ -12,10 +12,10 @@
   <script type="text/javascript">
     $(document).ready(function() {
       options = {
-        should_autosave: false
+        should_autosave: true
       }
 
-      var editor = $.roshambo('#editor', options)
+      var editor = $.roshambo('#editor', { should_autosave: true })
 
       // key = 'roshambo:saved'
 
@@ -31,12 +31,11 @@
 
       // window.editor = editor
 
-      // editor.el.on('keypress', function(ev) {
-      //   key = ev.keyCode
-      //   console.log(Object.keys(editor.textMap));
-      // });
+      editor.el.on('keyup', function(ev) {
+        editor.autosaveData()
+      });
 
-
+      window.editor = editor
       // load()
     })
   </script>

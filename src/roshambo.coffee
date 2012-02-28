@@ -17,10 +17,14 @@ $ ->
       @isBold = false
       @isItalic = false
 
+      @textMap = {}
+
       if @config.should_autosave
         this.loadAutosavedData()
 
       this.setupBindings()
+
+    # Autosaving
 
     loadAutosavedData: ->
       html = localStorage.getItem(@config.autosave_key)
@@ -29,6 +33,8 @@ $ ->
     autosaveData: ->
       html = @el.html()
       localStorage.setItem @config.autosave_key, html
+
+    # Formatting.
 
     enableBold: ->
       document.execCommand('bold')
@@ -50,7 +56,23 @@ $ ->
       @config.italicButton.removeClass('active')
       @isItalic = false
 
+    currentStyles: ->
+      bold: @isBold
+      italic: @isItalic
+
+    # Key events
+
+    handleKeypress: (event) ->
+      console.log("Cursor now at #{this.getCursorPosition()}")
+
+    getCursorPosition: ->
+      sel = window.getSelection()
+      sel.getRangeAt().startOffset
+
     setupBindings: ->
+      @el.on
+        keypress: (event ) => this.handleKeypress()
+
        @config.boldButton.on 'click', (ev) =>
         if @isBold
          this.disableBold()

@@ -3,7 +3,7 @@
   roshambo.css
 
   Expected structure:
-  
+
   .toolbar -> element that holds your buttons.
   #editor -> element that roshambo binds to.
 */
@@ -24,7 +24,7 @@
 }
 
 button:active {
-  color: #999;  
+  color: #999;
 }
 
 #editor {
@@ -33,6 +33,7 @@ button:active {
   box-shadow: 0px 1px 5px #CCC;
   margin-bottom: 20px;
   padding: 10px;
+  overflow: scroll;
 }
 
 #editor:focus {
