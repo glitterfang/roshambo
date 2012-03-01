@@ -135,7 +135,10 @@ $ ->
 
     handleShortcuts: (event) ->
       if event.metaKey and event.which == 66
-        this.enableBold()
+        if @isBold
+          this.disableBold()
+        else
+          this.enableBold()
       else
         false
 
