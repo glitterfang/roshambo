@@ -139,6 +139,11 @@ $ ->
           this.disableBold()
         else
           this.enableBold()
+      if event.metaKey and event.which == 73
+        if @isItalic
+          this.disableItalic()
+        else
+          this.enableItalic()
       else
         false
 
