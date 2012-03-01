@@ -1,12 +1,14 @@
 $ = jQuery
 
 $ ->
+
   class Roshambo
+
     defaults:
       boldButton: $('button#bold')
       italicButton: $('button#italic')
       should_autosave: false
-      autosave_key: 'roshambo'
+      autosave_key: "roshambo:autosave"
 
     constructor: (el, options) ->
       @config = $.extend @defaults, options
@@ -21,6 +23,7 @@ $ ->
 
       if @config.should_autosave
         this.loadAutosavedData()
+
 
       this.setupBindings()
 
@@ -73,12 +76,14 @@ $ ->
       sel = window.getSelection()
       tag = sel.baseNode.parentNode.tagName
 
+    autosave: ->
+      html = @el.html()
+      localStorage.setItem @config.autosave_key, html
+
     # Key events
 
-    handleKeypress: (event) ->
-      pos = this.getCursorPosition()
-      tag = this.currentTag()
-      sel = window.getSelection()
+    enableStyles: (sel) ->
+      tag = sel.baseNode.parentNode.tagName
 
       handle_tag = (tag) =>
         if tag is 'B' or tag is 'I' or tag is 'DIV'
@@ -95,10 +100,19 @@ $ ->
       parentTag = sel.baseNode.parentNode.parentNode.tagName
 
       if parentTag is 'B' or parentTag is 'I'
-        console.log "Handling parent tag"
         handle_tag(parentTag)
 
       handle_tag(tag)
+
+
+    handleKeypress: (event) ->
+      pos = this.getCursorPosition()
+      tag = this.currentTag()
+      sel = window.getSelection()
+
+      this.enableStyles(sel)
+
+      this.autosave() if @config.should_autosave
 
     # Original javascript version:
     # http://stackoverflow.com/questions/4767848/get-caret-cursor-position-in-contenteditable-area-containing-html-content
@@ -153,6 +167,10 @@ $ ->
           if not this.handleShortcuts(event)
             this.handleKeypress(event)
           true
+
+        mouseup: (event) =>
+          sel = window.getSelection()
+          this.enableStyles(sel)
 
        @config.boldButton.on 'click', (ev) =>
         this.focus()
