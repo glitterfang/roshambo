@@ -69,15 +69,11 @@ $ ->
       bold: @isBold
       italic: @isItalic
 
-
     currentTag: (point) ->
       sel = window.getSelection()
       tag = sel.baseNode.parentNode.tagName
 
     # Key events
-
-    # if the user is typing, then the user's current styles take precendence.
-    # if the user is navigating with the arrow keys, then archived styles take precedence.
 
     handleKeypress: (event) ->
       pos = this.getCursorPosition()
@@ -85,7 +81,7 @@ $ ->
       sel = window.getSelection()
 
       handle_tag = (tag) =>
-        if tag != 'DIV'
+        if tag is 'B' or tag is 'I' or tag is 'DIV'
           if tag is 'B'
             if not @isBold
               this.enableBold()
@@ -97,7 +93,9 @@ $ ->
           this.disableItalic()
 
       parentTag = sel.baseNode.parentNode.parentNode.tagName
+
       if parentTag is 'B' or parentTag is 'I'
+        console.log "Handling parent tag"
         handle_tag(parentTag)
 
       handle_tag(tag)
@@ -135,12 +133,18 @@ $ ->
 
       count
 
+    handleShortcuts: (event) ->
+      if event.metaKey and event.which == 66
+        this.enableBold()
+      else
+        false
+
     setupBindings: ->
       @el.on
-        keypress: (event) =>
-          # this.handleKeypress(event)
-        keyup: (event) =>
-          this.handleKeypress(event)
+        keydown: (event) =>
+          if not this.handleShortcuts(event)
+            this.handleKeypress(event)
+          true
 
        @config.boldButton.on 'click', (ev) =>
         this.focus()
