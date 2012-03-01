@@ -15,8 +15,8 @@ It's just my pet project right now.  It doesn't work, and I'm just exploring ide
 - Load `roshambo.js` and `roshambo.css` in your page.
 
 ```javascript
-  // latch onto a <textarea> in the DOMn.
-  var $editor = $.roshambo('textarea')
+  // latch onto the element you want to edit.
+  var $editor = $.roshambo('#editor')
 
   $editor.bind('submit', function(data) {
     // Play with the user's text.
