@@ -24,6 +24,8 @@ $ ->
 
       this.setupBindings()
 
+    focus: -> @el.focus()
+
     # Autosaving
 
     loadAutosavedData: ->
@@ -36,23 +38,30 @@ $ ->
 
     # Formatting.
 
-    enableBold: ->
-      document.execCommand('bold')
+    highlightBoldButton: ->
       @config.boldButton.addClass('active')
+
+    enableBold: ->
+      if not @isBold
+        document.execCommand('bold')
+      this.highlightBoldButton()
       @isBold = true
 
     enableItalic: ->
-      document.execCommand('italic')
+      if not @isItalic
+        document.execCommand('italic')
       @config.italicButton.addClass('active')
       @isItalic = true
 
     disableBold: ->
-      document.execCommand('bold')
-      @config.boldButton.removeClass('active')
-      @isBold = false
+      if @isBold
+        document.execCommand('bold')
+        @config.boldButton.removeClass('active')
+        @isBold = false
 
     disableItalic: ->
-      document.execCommand('italic')
+      if @isItalic
+        document.execCommand('italic')
       @config.italicButton.removeClass('active')
       @isItalic = false
 
@@ -61,10 +70,37 @@ $ ->
       italic: @isItalic
 
 
+    currentTag: (point) ->
+      sel = window.getSelection()
+      tag = sel.baseNode.parentNode.tagName
+
     # Key events
 
+    # if the user is typing, then the user's current styles take precendence.
+    # if the user is navigating with the arrow keys, then archived styles take precedence.
+
     handleKeypress: (event) ->
-      console.log this.getCursorPosition()
+      pos = this.getCursorPosition()
+      tag = this.currentTag()
+      sel = window.getSelection()
+
+      handle_tag = (tag) =>
+        if tag != 'DIV'
+          if tag is 'B'
+            if not @isBold
+              this.enableBold()
+          if tag is 'I'
+            if not @isItalic
+              this.enableItalic()
+        else
+          this.disableBold()
+          this.disableItalic()
+
+      parentTag = sel.baseNode.parentNode.parentNode.tagName
+      if parentTag is 'B' or parentTag is 'I'
+        handle_tag(parentTag)
+
+      handle_tag(tag)
 
     # Original javascript version:
     # http://stackoverflow.com/questions/4767848/get-caret-cursor-position-in-contenteditable-area-containing-html-content
@@ -101,15 +137,20 @@ $ ->
 
     setupBindings: ->
       @el.on
-        keypress: (event ) => this.handleKeypress()
+        keypress: (event) =>
+          # this.handleKeypress(event)
+        keyup: (event) =>
+          this.handleKeypress(event)
 
        @config.boldButton.on 'click', (ev) =>
+        this.focus()
         if @isBold
          this.disableBold()
         else
           this.enableBold()
 
        @config.italicButton.on 'click', (ev) =>
+         this.focus()
          if @isItalic
             this.disableItalic()
           else

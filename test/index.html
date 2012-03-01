@@ -45,10 +45,10 @@
   <script type="text/javascript">
     $(document).ready(function() {
       options = {
-        should_autosave: true
+        should_autosave: false
       }
 
-      var editor = $.roshambo('#editor', { should_autosave: true })
+      var editor = $.roshambo('#editor', options)
 
       // key = 'roshambo:saved'
 
@@ -63,10 +63,6 @@
       // }
 
       // window.editor = editor
-
-      editor.el.on('keyup', function(ev) {
-        editor.autosaveData()
-      });
 
       window.editor = editor
       // load()
